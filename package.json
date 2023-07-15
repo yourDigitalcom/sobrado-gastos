@@ -1,9 +1,6 @@
 {
   "name": "sobrado-gastos",
   "version": "0.0.0",
-  "engines": {
-    "node": "12.18.3"
-  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
