@@ -9,10 +9,6 @@ const routes: Routes = [
     pathMatch: 'full',
     component: HomeComponent
   },
-  // {
-  //   path:'**',
-  //   component: HomeComponent
-  // },
   {
     path:'home',
     component: HomeComponent

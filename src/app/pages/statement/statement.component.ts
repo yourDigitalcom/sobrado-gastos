@@ -23,6 +23,9 @@ export class StatementComponent implements OnInit {
 
   public ngOnInit(): void {
     this.listStatement();
+    const teste = this._session.monthlySelected.sort((a, b) => ( Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', ''))));
+    console.log('this._session.monthlySelected', teste);
+    
   }
 
   public deleteGasto(key: string): void {
@@ -35,8 +38,8 @@ export class StatementComponent implements OnInit {
     this._utils.goToPage('home');
   }
 
-  public listStatement():  Array<GastosModel> {
-    return this._session.monthlySelected;
+  public listStatement(): Array<GastosModel> {
+    return this._session.monthlySelected.sort((a, b) => ( Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', ''))));
   }
 
 }
