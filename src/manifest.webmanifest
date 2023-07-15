@@ -1,7 +1,7 @@
 {
-  "name": "Disk Breja Cotia",
-  "short_name": "Disk Breja Cotia",
-  "theme_color": "#1976d2",
+  "name": "Gastos Sobrado",
+  "short_name": "Gastos Sobrado",
+  "theme_color": "#fafafa",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
