@@ -1,0 +1,61 @@
+<div class="h-100 px-2">
+
+  <card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected($event)"></card-select>
+
+  <div class="add-button-footer">
+    <add-button (clicked)="receiverAddButton()" [fontSize]="50"></add-button>
+  </div>
+
+</div>
+<new-modal-share [open]="openModal" (close)="closeModal()">
+  <new-body-share>
+    <div class="px-2 pt-3">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip (click)="changeName(0)" [selected]="isDebito" color="primary"> Débito </mat-chip>
+            <mat-chip (click)="changeName(1)" [selected]="isCredito" color="primary"> Crédito </mat-chip>
+            <mat-chip (click)="changeName(2)" [selected]="isDinheiro" color="primary"> Dinheiro </mat-chip>
+            <mat-chip (click)="changeName(3)" [selected]="isPix" color="accent"> PIX </mat-chip>
+            <mat-chip (click)="changeName(4)" [selected]="isOther" color="accent"> Outro </mat-chip>
+          </mat-chip-list>
+        </div>
+        <div class="form-group">
+          <mat-form-field class="w-100">
+            <mat-label>Valor:</mat-label>
+            <input [style.font-size.px]="30" matInput class="input-group-text w-100 text-start" type="tel" currencyMask
+              formControlName="currency" id="currency-number"
+              [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+          </mat-form-field>
+        </div>
+
+        <div class="mb-3">
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip (click)="changeChip(0)" [selected]="selectedToday" color="primary"> Hoje </mat-chip>
+            <mat-chip (click)="changeChip(1)" [selected]="seletedYesterday" color="primary"> Ontem </mat-chip>
+            <mat-chip (click)="changeChip(2)" [selected]="showInputDate" color="accent">Calendário</mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <div *ngIf="showInputDate" class="my-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Data</mat-label>
+            <input type="date" matInput formControlName="datePicker" [(ngModel)]="datePicker" (change)="modelChanged()">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field class="w-100">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="description" id="description" #message maxlength="30" placeholder="Ex. Copo descartável">
+          <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
+        </mat-form-field>
+
+      </form>
+
+      <div class="text-center">
+        <button class="w-50" (click)="submitForm()" [disabled]="isEnableSave()" mat-raised-button color="primary">Salvar</button>
+      </div>
+
+    </div>
+  </new-body-share>
+</new-modal-share>

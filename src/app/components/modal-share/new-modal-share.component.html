@@ -1,0 +1,17 @@
+<div *ngIf="open" class="modal-share h-100" [class.dss-drawer--close]="isClose" (click.self)="toClose()" [ngStyle]="{'max-width.px': maxWidth}">
+    <section class="share-content">
+        <div class="w-100 row m-0 pl-2 pr-2 justify-content-between share-header">
+            <div  class="d-flex justify-content-between">
+                <!-- <span (click)="toClose()" dssIcon name="close-1px" size="medium"></span> -->
+
+                <p class="m-0"> Inserir Despesa</p>
+
+                <mat-icon (click)="close.emit(false)" [style.color]="'grey'" [style.font-size.px]="fontSize">close</mat-icon>
+            </div>
+        </div>
+
+        <div #bodyShare class="overflow-auto">
+            <ng-content select="new-body-share"></ng-content>
+        </div>
+    </section>
+</div>

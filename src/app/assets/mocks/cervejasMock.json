@@ -1,0 +1,24 @@
+{
+    "cervejas" : [
+        {
+            "marca": "skol",
+            "produtos": [
+                {
+                "descricao": "",
+                "image": "",
+                "preco": 1.90
+                },
+                {
+                "descricao": "",
+                "image": "",
+                "preco": 1.90
+                },
+                {
+                "descricao": "",
+                "image": "",
+                "preco": 1.90
+                }
+            ]
+        }
+    ]
+}

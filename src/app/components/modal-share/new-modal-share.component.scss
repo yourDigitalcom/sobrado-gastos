@@ -1,0 +1,89 @@
+
+
+.modal-share {
+  animation-duration: .5s;
+  animation-fill-mode: both;
+  animation-name: dss-drawer-fade-in;
+  animation-timing-function: cubic-bezier(0,0,.2,1);
+  top: 0px;
+  z-index: 1001;
+  position: fixed;
+  width: 100%;
+
+  .share-content {
+
+    -webkit-animation-duration: .5s;  
+    animation-duration: .5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: dss-drawer-slide-in-up;
+    animation-name: dss-drawer-slide-in-up;
+    -webkit-animation-timing-function: cubic-bezier(0,0,.2,1);
+    animation-timing-function: cubic-bezier(0,0,.2,1);
+
+    .share-header {
+      top: 0;
+      max-width: 500px;
+      height: 50px;
+      z-index: 2001;
+      background-color: white;
+      position: sticky;
+      box-shadow: 0px 0px 5px 0px #b1b1b1 !important;
+        
+      div {
+        align-self: center;
+      }
+    }
+
+  }
+
+  &.dss-drawer--close {
+    animation-name: dss-drawer-fade-out;
+    animation-timing-function: var(--token-drawer-motion-timing-function-leave);
+
+    .share-content {
+      animation-name: dss-drawer-slide-out-down;
+      animation-timing-function: var(--token-drawer-motion-timing-function-leave);
+    }
+  }
+
+}
+
+
+@keyframes dss-drawer-fade-in {
+  from {
+    background-color: white;
+  }
+
+  to {
+    background-color: white;
+  }
+}
+@keyframes dss-drawer-fade-out {
+  from {
+      background-color: white;
+  }
+  to {
+      background-color: white;
+  }
+  }
+  
+@keyframes dss-drawer-slide-in-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+  }
+  
+@keyframes dss-drawer-slide-out-down {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}

@@ -1,0 +1,46 @@
+@import url('http://fonts.cdnfonts.com/css/berlin-sans-fb-demi');
+
+@media(max-width: 500px) {
+    .card-container {
+        .tampinha {
+            width: 100% !important;
+            max-height: 40vw !important;
+            height: 40vw !important;
+
+            .title-text {
+                font-size: 5vw !important;
+            }
+        }
+    }
+}
+
+
+.card-container {
+
+    .tampinha {
+        background-image: url('/assets/images/placa_tampa.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        justify-content: center;
+        flex-direction: column;
+        display: flex;
+        cursor: pointer;
+        height: 200px;
+        
+        .title-text {
+            font-family: 'Berlin Sans FB Demi', sans-serif;
+            font-size: 20px;
+            color: white;
+            text-transform: uppercase;
+        }
+    }
+    :hover {
+        transform: scale(1.2); 
+        // box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+        .title-text {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}
