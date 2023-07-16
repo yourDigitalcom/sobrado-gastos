@@ -23,14 +23,9 @@ export class StatementComponent implements OnInit {
 
   public ngOnInit(): void {
     this.listStatement();
-    const teste = this._session.monthlySelected.sort((a, b) => ( Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', ''))));
-    console.log('this._session.monthlySelected', teste);
-    
   }
 
   public deleteGasto(key: string): void {
-    console.log('key', key);
-    
     this._gastosService.deletarGasto(key);
   }
 

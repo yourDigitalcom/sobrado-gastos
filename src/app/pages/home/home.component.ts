@@ -218,14 +218,12 @@ export class HomeComponent implements OnInit {
           (this.listaGastos.length > 0 && this.isEqualMonth(month))
             ? this.somaGastoDoMesmoMes(month, gasto)
             : this.adicionaGasto(gasto);
-
-        console.log('listaGastos', this.listaGastos.sort((a, b) => (Number(a.monthly.substring(0, 2) ) - Number(b.monthly.substring(0, 2)))));
         this.listaGastos = this.changePositionMonths(this.listaGastos);
         
         });
 
       }, error => {
-        console.log('error');
+        
       });
   }
 

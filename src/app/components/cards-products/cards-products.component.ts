@@ -10,8 +10,6 @@ export class CardsProductsComponent implements OnInit {
   private _products;
 
   @Input() public set products(val) {
-    console.log("produtos em cards-list ->" ,val);
-    
     this._products = val;
   }
 
