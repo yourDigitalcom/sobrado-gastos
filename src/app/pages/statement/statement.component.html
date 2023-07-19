@@ -1,6 +1,16 @@
 <navbar (back)="goBack()"></navbar>
+
+<div class="p-2">
+  <mat-chip-list aria-label="Fish selection">
+    <mat-chip (click)="changeName(0)" [selected]="isAll" [ngStyle]="{'background-color': isAll ? '#1db968' : '' }"> Todos </mat-chip>
+    <mat-chip (click)="changeName(1)" [selected]="isDebito" [ngStyle]="{'background-color': isDebito ? '#1db968' : '' }" > Débito </mat-chip>
+    <mat-chip (click)="changeName(2)" [selected]="isCredito" [ngStyle]="{'background-color': isCredito ? '#1db968' : '' }" > Crédito </mat-chip>
+    <mat-chip (click)="changeName(3)" [selected]="isDinheiro" [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }" > Dinheiro </mat-chip>
+    <mat-chip (click)="changeName(4)" [selected]="isPix" [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX </mat-chip>
+  </mat-chip-list>
+</div>
 <div class="h-100 pt-3 px-2">
-  <div [style.background-color]="'white'" *ngFor="let statement of listStatement()" class="d-flex justify-content-between border-bottom p-2 ">
+  <div [style.background-color]="'white'" *ngFor="let statement of monthlySelected" class="d-flex justify-content-between border-bottom p-2 ">
 
     <div class="">
       <p class="m-0">{{statement.description}}</p>

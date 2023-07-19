@@ -11,7 +11,15 @@ import { SessionService } from '../../services/session/session.service';
 })
 export class StatementComponent implements OnInit {
 
+  public isAll: boolean = false;
+  public isDebito: boolean = false;
+  public isCredito: boolean = false;
+  public isDinheiro: boolean = false;
+  public isPix: boolean = false;
+
   // public listStatement: Array<GastosModel>;
+
+  private _monthlySelected: Array<GastosModel>;
 
   constructor(
     private readonly _session: SessionService,
@@ -22,7 +30,16 @@ export class StatementComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.listStatement();
+    this.changeName(0);
+    this.monthlySelected = this.ordernedListStatement();
+  }
+
+  public set monthlySelected(value) {
+    this._monthlySelected = value;
+  }
+
+  public get monthlySelected(): Array<GastosModel> {
+    return this._monthlySelected;
   }
 
   public deleteGasto(key: string): void {
@@ -33,8 +50,60 @@ export class StatementComponent implements OnInit {
     this._utils.goToPage('home');
   }
 
-  public listStatement(): Array<GastosModel> {
-    return this._session.monthlySelected.sort((a, b) => ( Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', ''))));
+  public ordernedListStatement(): Array<GastosModel> {
+    return this._session.monthlySelected.sort((a, b) => (Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', '')))).reverse();
+  }
+
+  public changeName(value: number): void {
+
+    switch (value) {
+      case 0:
+        this.isAll = true;
+        this.isDebito = false;
+        this.isCredito = false;
+        this.isDinheiro = false;
+        this.isPix = false;
+        this.monthlySelected = this.ordernedListStatement();
+        break;
+      case 1:
+        this.isAll = false;
+        this.isDebito = true;
+        this.isCredito = false;
+        this.isDinheiro = false;
+        this.isPix = false;
+        this.monthlySelected = this.ordernedListStatement();
+        this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Débito');
+        break;
+      case 2:
+        this.isAll = false;
+        this.isDebito = false;
+        this.isCredito = true;
+        this.isDinheiro = false;
+        this.isPix = false;
+        this.monthlySelected = this.ordernedListStatement();
+        this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Crédito');
+        break;
+      case 3:
+        this.isAll = false;
+        this.isDebito = false;
+        this.isCredito = false;
+        this.isDinheiro = true;
+        this.isPix = false;
+        this.monthlySelected = this.ordernedListStatement();
+        this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Dinheiro');
+        break;
+      case 4:
+        this.isAll = false;
+        this.isDebito = false;
+        this.isCredito = false;
+        this.isDinheiro = false;
+        this.isPix = true;
+        this.monthlySelected = this.ordernedListStatement();
+        this.monthlySelected = this._monthlySelected.filter(value => value.name === 'PIX');
+        break;
+      default:
+        break;
+    }
   }
 
 }
