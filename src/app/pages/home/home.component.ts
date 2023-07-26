@@ -218,12 +218,12 @@ export class HomeComponent implements OnInit {
           (this.listaGastos.length > 0 && this.isEqualMonth(month))
             ? this.somaGastoDoMesmoMes(month, gasto)
             : this.adicionaGasto(gasto);
-        this.listaGastos = this.changePositionMonths(this.listaGastos);
-        
+          this.listaGastos = this.changePositionMonths(this.listaGastos);
+
         });
 
       }, error => {
-        
+
       });
   }
 
@@ -258,7 +258,7 @@ export class HomeComponent implements OnInit {
   }
 
   private changePositionMonths(listaGastos: Array<iCardSelect>): Array<iCardSelect> {
-    return this.listaGastos.sort((a, b) => (Number(a.monthly.substring(0, 2) ) - Number(b.monthly.substring(0, 2))));
-};
+    return this.listaGastos.sort((a, b) => (Number(a.monthly.substring(0, 2)) - Number(b.monthly.substring(0, 2))));
+  }
 
 }

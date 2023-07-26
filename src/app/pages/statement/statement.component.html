@@ -3,14 +3,28 @@
 <div class="p-2">
   <mat-chip-list aria-label="Fish selection">
     <mat-chip (click)="changeName(0)" [selected]="isAll" [ngStyle]="{'background-color': isAll ? '#1db968' : '' }"> Todos </mat-chip>
-    <mat-chip (click)="changeName(1)" [selected]="isDebito" [ngStyle]="{'background-color': isDebito ? '#1db968' : '' }" > Débito </mat-chip>
-    <mat-chip (click)="changeName(2)" [selected]="isCredito" [ngStyle]="{'background-color': isCredito ? '#1db968' : '' }" > Crédito </mat-chip>
-    <mat-chip (click)="changeName(3)" [selected]="isDinheiro" [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }" > Dinheiro </mat-chip>
-    <mat-chip (click)="changeName(4)" [selected]="isPix" [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX </mat-chip>
+    <mat-chip (click)="changeName(1)" [selected]="isDebito"
+      [ngStyle]="{'background-color': isDebito ? '#1db968' : '' }"> Débito </mat-chip>
+    <mat-chip (click)="changeName(2)" [selected]="isCredito"
+      [ngStyle]="{'background-color': isCredito ? '#1db968' : '' }"> Crédito </mat-chip>
+    <mat-chip (click)="changeName(3)" [selected]="isDinheiro"
+      [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }"> Dinheiro </mat-chip>
+    <mat-chip (click)="changeName(4)" [selected]="isPix" [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX</mat-chip>
   </mat-chip-list>
 </div>
-<div class="h-100 pt-3 px-2">
-  <div [style.background-color]="'white'" *ngFor="let statement of monthlySelected" class="d-flex justify-content-between border-bottom p-2 ">
+<div class="h-100 pt-2 px-2">
+  <div *ngIf="totalValueSelected" class="d-flex justify-content-between p-2 mb-2" [style.background-color]="'#1db968'" [style.border-radius.px]="10">
+    <div [style.color]="'white'">
+      <strong>{{ labelValueSelected }}</strong>
+      <!-- {{ label }} -->
+      <!-- {{ labelValueSelected }} -->
+    </div>
+    <div class="" [style.color]="'white'">
+       <strong> {{ totalValueSelected | currency:'BRL':'symbol'}} </strong>
+    </div>
+  </div>
+  <div [ngStyle]="{'border-radius': i === 0 ? '10px 10px 0px 0px' : '' }" [style.background-color]="'white'" *ngFor="let statement of monthlySelected; index as i"
+    class="d-flex justify-content-between border-bottom p-2 ">
 
     <div class="">
       <p class="m-0">{{statement.description}}</p>

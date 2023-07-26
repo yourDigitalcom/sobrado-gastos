@@ -17,6 +17,10 @@ export class StatementComponent implements OnInit {
   public isDinheiro: boolean = false;
   public isPix: boolean = false;
 
+  public labelValueSelected: string;
+
+  private _totalValueSelected: number;
+
   // public listStatement: Array<GastosModel>;
 
   private _monthlySelected: Array<GastosModel>;
@@ -32,7 +36,16 @@ export class StatementComponent implements OnInit {
   public ngOnInit(): void {
     this.changeName(0);
     this.monthlySelected = this.ordernedListStatement();
+
+    const teste = this.monthlySelected.map(value => value.value).reduce((value, curr) => (value + curr));
+
+    console.log('teste', teste);
+    
+
+    // const teste = this.monthlySelected.reduce((value, curr) => (value.value + curr.value))
   }
+
+
 
   public set monthlySelected(value) {
     this._monthlySelected = value;
@@ -40,6 +53,14 @@ export class StatementComponent implements OnInit {
 
   public get monthlySelected(): Array<GastosModel> {
     return this._monthlySelected;
+  }
+
+  public set totalValueSelected(value) {
+    this._totalValueSelected = value;
+  }
+
+  public get totalValueSelected(): number {
+    return this.monthlySelected.map(value => value.value).reduce((value, curr) => (value + curr));
   }
 
   public deleteGasto(key: string): void {
@@ -54,6 +75,10 @@ export class StatementComponent implements OnInit {
     return this._session.monthlySelected.sort((a, b) => (Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', '')))).reverse();
   }
 
+  // public sumTotalSelected(): number {
+
+  // }
+
   public changeName(value: number): void {
 
     switch (value) {
@@ -64,6 +89,7 @@ export class StatementComponent implements OnInit {
         this.isDinheiro = false;
         this.isPix = false;
         this.monthlySelected = this.ordernedListStatement();
+        this.labelValueSelected = 'Total';
         break;
       case 1:
         this.isAll = false;
@@ -73,6 +99,7 @@ export class StatementComponent implements OnInit {
         this.isPix = false;
         this.monthlySelected = this.ordernedListStatement();
         this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Débito');
+        this.labelValueSelected = 'Total em Débito';
         break;
       case 2:
         this.isAll = false;
@@ -82,6 +109,7 @@ export class StatementComponent implements OnInit {
         this.isPix = false;
         this.monthlySelected = this.ordernedListStatement();
         this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Crédito');
+        this.labelValueSelected = 'Total em Crédito';
         break;
       case 3:
         this.isAll = false;
@@ -91,6 +119,7 @@ export class StatementComponent implements OnInit {
         this.isPix = false;
         this.monthlySelected = this.ordernedListStatement();
         this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Dinheiro');
+        this.labelValueSelected = 'Total em Dinheiro';
         break;
       case 4:
         this.isAll = false;
@@ -100,6 +129,7 @@ export class StatementComponent implements OnInit {
         this.isPix = true;
         this.monthlySelected = this.ordernedListStatement();
         this.monthlySelected = this._monthlySelected.filter(value => value.name === 'PIX');
+        this.labelValueSelected = 'Total em Pix';
         break;
       default:
         break;
