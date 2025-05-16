@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { iCardSelect } from '../../components/card-select/card-select.component';
 import { SessionService } from '../../services/session/session.service';
 import { GastosModel } from '../../models/gastos.model';
@@ -86,6 +86,9 @@ export class HomeComponent implements OnInit {
   public segmentIcon: string;
 
   public dateNow = new Date();
+
+  public startY = 0;
+  public threshold = 100; // Defina um limite para ativar o refresh
 
   constructor(
     private readonly _utils: UtilService,
@@ -368,16 +371,34 @@ export class HomeComponent implements OnInit {
   }
 
   private listaSelecionadaVazia(mes: string): void {
-    this.listaSelecionada = 
-      {
-        monthName: mes,
-        total: 0,
-        lancamentos: []
-      }
-    ;
+    this.listaSelecionada =
+    {
+      monthName: mes,
+      total: 0,
+      lancamentos: []
+    }
+      ;
     this.listaGastos = [];
     console.log('listaSelecionadaVazia', this.listaSelecionada && this.listaSelecionada.monthName);
-    
+
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    this.startY = event.touches[0].clientY;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    const endY = event.changedTouches[0].clientY;
+
+    if (endY - this.startY > this.threshold) {
+      this.refreshApp();
+    }
+  }
+
+  refreshApp() {
+    location.reload(); // Recarrega a página
   }
 
 }
