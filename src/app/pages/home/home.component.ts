@@ -7,6 +7,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { UtilService } from 'src/app/services/utils/util.service';
 
+import * as moment from 'moment';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,6 +18,10 @@ import { UtilService } from 'src/app/services/utils/util.service';
 export class HomeComponent implements OnInit {
 
   public listaGastos: Array<iCardSelect>;
+
+  public listaTotal: Array<any>;
+
+  public listaSelecionada: any;
 
   public form: FormGroup;
 
@@ -54,6 +61,32 @@ export class HomeComponent implements OnInit {
     { mes: '12', name: 'Dezembro' },
   ];
 
+  public monthMap: { [key: string]: number } = {
+    "Janeiro": 1,
+    "Fevereiro": 2,
+    "Março": 3,
+    "Abril": 4,
+    "Maio": 5,
+    "Junho": 6,
+    "Julho": 7,
+    "Agosto": 8,
+    "Setembro": 9,
+    "Outubro": 10,
+    "Novembro": 11,
+    "Dezembro": 12
+  };
+
+  public listSegment = [
+    { name: 'Mercadoria', icon: 'trolley', selected: false },
+    { name: 'Construção', icon: 'construction', selected: false },
+    { name: 'Casa', icon: 'home', selected: false },
+  ];
+
+  public segmentName: string;
+  public segmentIcon: string;
+
+  public dateNow = new Date();
+
   constructor(
     private readonly _utils: UtilService,
     private readonly _session: SessionService,
@@ -66,6 +99,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.todosGastos();
     this.changeName(0);
+    this.selectedSegment(0);
     this.form = this._formBuilder.group({
       currency: [0, [Validators.required, Validators.min(1),]],
       description: ['', [Validators.required, Validators.min(1),]],
@@ -90,8 +124,12 @@ export class HomeComponent implements OnInit {
       date: this.inputDate,
       name: this.nameSelected,
       description: description.value as string,
-      value: currency.value as number
+      value: currency.value as number,
+      segment: this.segmentName,
+      iconSegment: this.segmentIcon
     };
+    console.log('submitForm =>', gasto);
+
     this.publicarGastos(gasto);
   }
 
@@ -201,47 +239,78 @@ export class HomeComponent implements OnInit {
     return Number(array.reduce((soma, i) => soma + i).toFixed(2));
   }
 
-  private isEqualMonth(month: string): boolean {
-    const value = this.listaGastos.find(value => value.title === month);
-    return value && value.title === month;
+  private isEqualSegment(segment: string): boolean {
+    const value = this.listaGastos.find(value => value.segmentName === segment);
+    return value && value.segmentName === segment;
   }
 
   private todosGastos(): void {
-    this.listaGastos = new Array<iCardSelect>();
+    this.listaTotal = new Array<any>();
     this._gastosService.todosGastos()
       .subscribe((success: any) => {
         this._session.allExpenses = success;
         if (this.monthlySelected) this.filterMonthlySelected(this.monthlySelected);
         success.forEach(gasto => {
           this._session.idDataBase = gasto.id + 1;
+          console.log('TODOS GASTOS =>', gasto);
+
           const month = this.convertMonthlyToMonth(gasto.monthly);
-          (this.listaGastos.length > 0 && this.isEqualMonth(month))
-            ? this.somaGastoDoMesmoMes(month, gasto)
-            : this.adicionaGasto(gasto);
-          this.listaGastos = this.changePositionMonths(this.listaGastos);
 
+          if (this.listaTotal.length > 0 && this.isEquaListaPorMes(this.listaTotal, month)) {
+            this.listaTotal.find(value => value.monthName === month).lancamentos.push(gasto);
+            this.listaTotal.find(value => value.monthName === month).total += gasto.value;
+          } else {
+            this.listaTotal.push({
+              monthName: this.convertMonthlyToMonth(gasto.monthly),
+              total: gasto.value,
+              lancamentos: [gasto]
+            });
+          }
         });
+        this.changePositionMonths();
+        const monthly = moment(this.dateNow).format('DD/MM/YYYY').split('/');
+        this.listaSelecionada = this.listaTotal.find(value => value.monthName === this.convertMonthlyToMonth(`${monthly[1]}${monthly[2]}`));
 
+        // this.listaGastos = this.listaSelecionada.lancamentos;
+        this.refreshList();
       }, error => {
 
       });
+  }
+
+  private isEquaListaPorMes(lista: Array<any>, month: any): boolean {
+    const value = lista.find(value => value.monthName === month);
+    return value && value.monthName === month;
+  }
+
+  private refreshList(): void {
+    this.listaGastos = new Array<iCardSelect>();
+    this.listaSelecionada.lancamentos.forEach(gasto => {
+      if (this.listaGastos.length > 0 && this.isEqualSegment(gasto.segment)) {
+        this.somaGastoDoMesmoSegment(gasto.segment, gasto)
+      } else {
+        this.adicionaGasto(gasto);
+      }
+    });
   }
 
   private adicionaGasto(gasto: any): void {
     this.listaGastos.push({
       id: gasto.id,
       monthly: gasto.monthly,
-      title: this.convertMonthlyToMonth(gasto.monthly),
+      title: '',
       subTitle: {
         name: 'Gasto total',
         value: gasto.value
       },
-      key: gasto.key
+      key: gasto.key,
+      segmentIcon: gasto.iconSegment,
+      segmentName: gasto.segment
     });
   }
 
-  private somaGastoDoMesmoMes(month: string, gasto: any): void {
-    this.listaGastos.find(value => value.title === month).subTitle.value += gasto.value;
+  private somaGastoDoMesmoSegment(segment: string, gasto: any): void {
+    this.listaGastos.find(value => value.segmentName === segment).subTitle.value += gasto.value;
   }
 
   private filterMonthlySelected(value: string): void {
@@ -252,13 +321,63 @@ export class HomeComponent implements OnInit {
     this._gastosService.publicarGastos(value)
       .subscribe(success => {
         this.closeModal();
+        this.todosGastos();
       }, error => {
         this.closeModal();
       });
   }
 
-  private changePositionMonths(listaGastos: Array<iCardSelect>): Array<iCardSelect> {
-    return this.listaGastos.sort((a, b) => (Number(a.monthly.substring(0, 2)) - Number(b.monthly.substring(0, 2))));
+  private changePositionMonths(): void {
+    this.listaTotal.sort((a, b) => this.monthMap[a.monthName] - this.monthMap[b.monthName]);
+  }
+
+  public selectedSegment(index: number): void {
+    this.listSegment.forEach((item, i) => {
+      item.selected = i === index;
+    });
+    this.segmentName = this.listSegment[index].name;
+    this.segmentIcon = this.listSegment[index].icon;
+  }
+
+  public backMonth(): void {
+
+    const mesAnterior = String(this.monthMap[this.listaSelecionada.monthName] - 1);
+    const mes = mesAnterior.length === 1 ? '0' + mesAnterior : mesAnterior;
+    const mesFiltrado = this.nomeMeses.find(value => value.mes === mes).name;
+
+    this.listaSelecionada = this.listaTotal.find(value => value.monthName === mesFiltrado);
+    console.log('backMonth', this.listaSelecionada);
+    this.refreshList();
+  }
+
+  public nextMonth(): void {
+    const mesAnterior = String(this.monthMap[this.listaSelecionada.monthName] + 1);
+    const mes = mesAnterior.length === 1 ? '0' + mesAnterior : mesAnterior;
+    const mesFiltrado = this.nomeMeses.find(value => value.mes === mes).name;
+    this.listaSelecionada = this.listaTotal.find(value => value.monthName === mesFiltrado);
+    this.checkMesSelecionado(this.listaSelecionada, mesFiltrado);
+    console.log('nextbackMonth', this.listaSelecionada);
+  }
+
+  private checkMesSelecionado(list: Array<any>, mes: string): void {
+    if (list) {
+      this.refreshList();
+    } else {
+      this.listaSelecionadaVazia(mes);
+    }
+  }
+
+  private listaSelecionadaVazia(mes: string): void {
+    this.listaSelecionada = 
+      {
+        monthName: mes,
+        total: 0,
+        lancamentos: []
+      }
+    ;
+    this.listaGastos = [];
+    console.log('listaSelecionadaVazia', this.listaSelecionada && this.listaSelecionada.monthName);
+    
   }
 
 }

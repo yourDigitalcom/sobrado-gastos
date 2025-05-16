@@ -26,15 +26,17 @@ import { NewBodyShareComponent } from './components/modal-share/new-body-share.c
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { StatementComponent } from './pages/statement/statement.component';
 
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
-import { AngularFireModule } from '@angular/fire';
+// import { AngularFireModule } from '@angular/fire';
 
 import {  } from '@angular/fire';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { Database, getDatabase, provideDatabase } from '@angular/fire/database';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "right",
   allowNegative: true,
@@ -78,7 +80,10 @@ registerLocaleData(ptBr);
       registrationStrategy: 'registerWhenStable:30000'
     }),
     MaterialModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    // AngularFireModule.initializeApp(environment.firebaseConfig)
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    provideDatabase(() => getDatabase()),
   ],
   providers: [
     HttpClient,

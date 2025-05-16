@@ -8,7 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
+// import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -23,12 +23,12 @@ const MODULES = [
   MatIconModule,
   MatChipsModule,
   MatDatepickerModule,
-  MatMomentDateModule,
+  // MatMomentDateModule,
   MatNativeDateModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  MatMenuModule
+  MatMenuModule,
 ];
 @NgModule({
   imports: [CommonModule, MODULES],

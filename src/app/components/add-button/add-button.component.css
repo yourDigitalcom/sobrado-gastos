@@ -1,4 +1,13 @@
 button {
     min-width: 80px;
     text-align: start;
+
+    .bi-plus-circle::before {
+
+        background-color: #1db968;
+        color: white;
+        border-radius: 50%;
+
+    }
 }
+

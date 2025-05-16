@@ -4,3 +4,18 @@
     bottom: 10px;
     left: 41%;
 }
+
+.success-selected {
+    background-color: #1db968 !important;
+    span {
+        color: white !important;
+    }
+
+    mat-icon {
+        color: white !important;
+    }
+}
+
+.inactive-class {
+
+}
