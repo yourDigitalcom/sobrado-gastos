@@ -2,7 +2,12 @@
 
     <div class="d-flex w-100 p-0">
         <div class="col-10 text-start p-0">
-            <div> {{ content.title }} </div>
+            <div class="d-flex">
+                <div>
+                    <mat-icon>{{ content.segmentIcon }}</mat-icon>
+                </div>
+                <div> {{ content.segmentName }} </div>
+            </div>
             <div *ngIf="content.subTitle" class="sub-title">
                 <span class="fw-light" > {{ content.subTitle.name }}: </span>
                 <span class="fw-light"> {{ content.subTitle.value  | currency:'BRL':'symbol'}} </span>

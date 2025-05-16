@@ -6,7 +6,9 @@ export interface iCardSelect {
   title: string;
   monthly: string;
   subTitle: iSubTitle,
-  key: string
+  key: string,
+  segmentName: string,
+  segmentIcon: string
 }
 export interface iSubTitle {
   name: string;

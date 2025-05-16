@@ -1,9 +1,21 @@
-<div class="h-100 px-2">
+<div class="h-100">
 
-  <card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected($event)"></card-select>
+  <ng-container *ngIf="listaSelecionada && listaSelecionada.monthName">
+    <div style="background-color: rgb(29, 185, 104);" class="d-flex justify-content-between px-3 align-items-center">
+      <mat-icon (click)="backMonth()" style="color: white"> arrow_back_ios </mat-icon>
+      <div class="text-center py-3">
+        <h1 style="color: white;">{{listaSelecionada.monthName}}</h1>
+        <h3 style="color: white;">{{ listaSelecionada.total | currency:'BRL':'symbol'}}</h3>
+      </div>
+      <mat-icon (click)="nextMonth()" style="color: white"> arrow_forward_ios </mat-icon>
+    </div>
+  </ng-container>
 
-  <div class="add-button-footer">
-    <add-button (clicked)="receiverAddButton()" [fontSize]="80"></add-button>
+  <div class="px-2">
+    <card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected($event)"></card-select>
+    <div class="add-button-footer">
+      <add-button (clicked)="receiverAddButton()" [fontSize]="80"></add-button>
+    </div>
   </div>
 
 </div>
@@ -12,13 +24,14 @@
     <div class="px-2 pt-3">
       <form [formGroup]="form">
         <div class="mb-3">
-          <mat-chip-list aria-label="Fish selection">
-            <mat-chip (click)="changeName(0)" [selected]="isDebito" [ngStyle]="{'background-color': isDebito ? '#1db968' : '' }"> Débito </mat-chip>
-            <mat-chip (click)="changeName(1)" [selected]="isCredito" [ngStyle]="{'background-color': isCredito ? '#1db968' : '' }"> Crédito </mat-chip>
-            <mat-chip (click)="changeName(2)" [selected]="isDinheiro" [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }"> Dinheiro </mat-chip>
-            <mat-chip (click)="changeName(3)" [selected]="isPix" [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX </mat-chip>
-            <!-- <mat-chip (click)="changeName(4)" [selected]="isOther" color="accent"> Outro </mat-chip> -->
-          </mat-chip-list>
+          <mat-chip-listbox aria-label="Dog selection">
+            <ng-container *ngFor="let segment of listSegment index as i">
+              <mat-chip [ngClass]="{ 'success-selected': segment.selected, 'inactive-class': !segment.selected }"
+                (click)="selectedSegment(i)">
+                <mat-icon matChipAvatar>{{segment.icon}}</mat-icon>{{segment.name}}
+              </mat-chip>
+            </ng-container>
+          </mat-chip-listbox>
         </div>
         <div class="form-group">
           <mat-form-field class="w-100">
@@ -28,32 +41,51 @@
               [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
           </mat-form-field>
         </div>
+        <div class="mb-3">
+          <mat-chip-listbox aria-label="Fish selection">
+            <mat-chip-option (click)="changeName(0)" [selected]="isDebito"
+              [ngStyle]="{'background-color': isDebito ? '#1db968' : '' }"> Débito </mat-chip-option>
+            <mat-chip-option (click)="changeName(1)" [selected]="isCredito"
+              [ngStyle]="{'background-color': isCredito ? '#1db968' : '' }"> Crédito </mat-chip-option>
+            <mat-chip-option (click)="changeName(3)" [selected]="isPix"
+              [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX </mat-chip-option>
+            <mat-chip-option (click)="changeName(2)" [selected]="isDinheiro"
+              [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }"> Dinheiro </mat-chip-option>
+            <!-- <mat-chip (click)="changeName(4)" [selected]="isOther" color="accent"> Outro </mat-chip> -->
+          </mat-chip-listbox>
+        </div>
+
+        <mat-form-field class="w-100">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="description" id="description" #message maxlength="30"
+            placeholder="Ex. Copo descartável">
+          <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
+        </mat-form-field>
 
         <div class="mb-3">
-          <mat-chip-list aria-label="Fish selection">
-            <mat-chip (click)="changeChip(0)" [selected]="selectedToday" color="primary"> Hoje </mat-chip>
-            <mat-chip (click)="changeChip(1)" [selected]="seletedYesterday" color="primary"> Ontem </mat-chip>
-            <mat-chip (click)="changeChip(2)" [selected]="showInputDate" color="accent">Calendário</mat-chip>
-          </mat-chip-list>
+          <mat-chip-listbox aria-label="Fish selection">
+            <mat-chip-option (click)="changeChip(0)" [selected]="selectedToday" color="primary"> Hoje </mat-chip-option>
+            <mat-chip-option (click)="changeChip(1)" [selected]="seletedYesterday" color="accent"> Ontem
+            </mat-chip-option>
+            <mat-chip-option (click)="changeChip(2)" [selected]="showInputDate"
+              color="basic">Calendário</mat-chip-option>
+          </mat-chip-listbox>
         </div>
+
 
         <div *ngIf="showInputDate" class="my-3">
           <mat-form-field class="example-full-width">
             <mat-label>Data</mat-label>
             <input type="date" matInput formControlName="datePicker" [(ngModel)]="datePicker" (change)="modelChanged()">
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
-
-        <mat-form-field class="w-100">
-          <mat-label>Descrição</mat-label>
-          <input matInput formControlName="description" id="description" #message maxlength="30" placeholder="Ex. Copo descartável">
-          <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
-        </mat-form-field>
-
       </form>
 
-      <div class="text-center">
-        <button class="w-50" (click)="submitForm()" [disabled]="isEnableSave()" mat-raised-button color="primary">Salvar</button>
+      <div class="text-center mt-4">
+        <button class="w-100" (click)="submitForm()" [disabled]="isEnableSave()" mat-raised-button
+          color="primary">Salvar</button>
       </div>
 
     </div>
