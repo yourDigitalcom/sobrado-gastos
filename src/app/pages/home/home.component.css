@@ -19,3 +19,8 @@
 .inactive-class {
 
 }
+
+.isdisabled {
+    opacity: 0.5; /* Torna o ícone visualmente desativado */
+  pointer-events: none; /* Remove interatividade */
+}

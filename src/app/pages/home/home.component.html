@@ -2,17 +2,17 @@
 
   <ng-container *ngIf="listaSelecionada && listaSelecionada.monthName">
     <div style="background-color: rgb(29, 185, 104);" class="d-flex justify-content-between px-3 align-items-center">
-      <mat-icon (click)="backMonth()" style="color: white"> arrow_back_ios </mat-icon>
+      <mat-icon [ngClass]="{ 'isdisabled': isDisabledBackMonth }" (click)="backMonth()" style="color: white"> arrow_back_ios </mat-icon>
       <div class="text-center py-3">
         <h1 style="color: white;">{{listaSelecionada.monthName}}</h1>
         <h3 style="color: white;">{{ listaSelecionada.total | currency:'BRL':'symbol'}}</h3>
       </div>
-      <mat-icon (click)="nextMonth()" style="color: white"> arrow_forward_ios </mat-icon>
+      <mat-icon [ngClass]="{ 'isdisabled': isDisabledNextMonth }" (click)="nextMonth()" style="color: white"> arrow_forward_ios </mat-icon>
     </div>
   </ng-container>
 
   <div class="px-2">
-    <card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected($event)"></card-select>
+    <card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected(item)"></card-select>
     <div class="add-button-footer">
       <add-button (clicked)="receiverAddButton()" [fontSize]="80"></add-button>
     </div>

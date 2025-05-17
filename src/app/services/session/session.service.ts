@@ -9,6 +9,7 @@ export class SessionService {
   private _idDataBase: number;
   private _monthlySelected: Array<GastosModel>;
   private _allExpenses: Array<GastosModel>;
+  private _statement: Array<any>;
 
   public set idDataBase(id: number) {
     this._idDataBase = id;
@@ -34,5 +35,15 @@ export class SessionService {
   public get allExpenses(): Array<GastosModel> {
     return this._allExpenses;
   }
+
+  public set statement(monthly: Array<GastosModel>) {
+    this._statement = monthly;
+  }
+
+  public get statement(): Array<GastosModel> {
+    return this._statement;
+  }
+
+  
 
 }

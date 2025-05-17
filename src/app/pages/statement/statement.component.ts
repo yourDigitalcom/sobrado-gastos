@@ -25,6 +25,8 @@ export class StatementComponent implements OnInit {
 
   private _monthlySelected: Array<GastosModel>;
 
+  public metodos: Array<string>;
+
   constructor(
     private readonly _session: SessionService,
     private readonly _gastosService: GastosService,
@@ -35,14 +37,11 @@ export class StatementComponent implements OnInit {
 
   public ngOnInit(): void {
     this.changeName(0);
-    this.monthlySelected = this.ordernedListStatement();
-
-    const teste = this.monthlySelected.map(value => value.value).reduce((value, curr) => (value + curr));
-
-    console.log('teste', teste);
     
+    this.metodos = [...new Set(this._session.statement.map(val => val.name))];
 
-    // const teste = this.monthlySelected.reduce((value, curr) => (value.value + curr.value))
+    console.log('nomesUnicos', this.metodos);
+    
   }
 
 
@@ -60,7 +59,7 @@ export class StatementComponent implements OnInit {
   }
 
   public get totalValueSelected(): number {
-    return this.monthlySelected.map(value => value.value).reduce((value, curr) => (value + curr));
+    return this.monthlySelected.length > 0 ? this.monthlySelected.map(value => value.value).reduce((value, curr) => (value + curr)) : 0;
   }
 
   public deleteGasto(key: string): void {
@@ -72,7 +71,7 @@ export class StatementComponent implements OnInit {
   }
 
   public ordernedListStatement(): Array<GastosModel> {
-    return this._session.monthlySelected.sort((a, b) => (Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', '')))).reverse();
+    return this._session.statement.sort((a, b) => (Number(a.date.substring(0, 2).replace('/', '')) - Number(b.date.substring(0, 2).replace('/', '')))).reverse();
   }
 
   // public sumTotalSelected(): number {
@@ -109,6 +108,8 @@ export class StatementComponent implements OnInit {
         this.isPix = false;
         this.monthlySelected = this.ordernedListStatement();
         this.monthlySelected = this._monthlySelected.filter(value => value.name === 'Crédito');
+        console.log('this.monthlySelected', this.monthlySelected);
+        
         this.labelValueSelected = 'Total em Crédito';
         break;
       case 3:

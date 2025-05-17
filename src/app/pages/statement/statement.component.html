@@ -11,9 +11,10 @@
       [ngStyle]="{'background-color': isDinheiro ? '#1db968' : '' }"> Dinheiro </mat-chip>
     <mat-chip (click)="changeName(4)" [selected]="isPix" [ngStyle]="{'background-color': isPix ? '#1db968' : '' }"> PIX</mat-chip>
   </mat-chip-list>
+
 </div>
 <div class="h-100 pt-2 px-2">
-  <div *ngIf="totalValueSelected" class="d-flex justify-content-between p-2 mb-2" [style.background-color]="'#1db968'" [style.border-radius.px]="10">
+  <div class="d-flex justify-content-between p-2 mb-2" [style.background-color]="'#1db968'" [style.border-radius.px]="10">
     <div [style.color]="'white'">
       <strong>{{ labelValueSelected }}</strong>
       <!-- {{ label }} -->

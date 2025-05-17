@@ -87,8 +87,11 @@ export class HomeComponent implements OnInit {
 
   public dateNow = new Date();
 
+  public isDisabledNextMonth: boolean;
+  public isDisabledBackMonth: boolean;
+
   public startY = 0;
-  public threshold = 100; // Defina um limite para ativar o refresh
+  public threshold = 300; // Defina um limite para ativar o refresh
 
   constructor(
     private readonly _utils: UtilService,
@@ -145,10 +148,13 @@ export class HomeComponent implements OnInit {
     this.ngOnInit();
   }
 
-  public cardSelected(value: string): void {
-    this.monthlySelected = value;
-    this.filterMonthlySelected(value);
+  public cardSelected(item: any): void {
+    this.filterSegmentSelected(item);
     this._utils.goToPage('statement');
+  }
+
+  public filterSegmentSelected(item: any): void {
+    this._session.statement = this.listaSelecionada.lancamentos.filter(lancamento => lancamento.iconSegment === item.segmentIcon);
   }
 
   public changeChip(value: number): void {
@@ -294,7 +300,16 @@ export class HomeComponent implements OnInit {
       } else {
         this.adicionaGasto(gasto);
       }
+      this.checkDisableMonth();
     });
+  }
+
+  public checkDisableMonth(): void {
+    const monthly = moment(this.dateNow).format('DD/MM/YYYY').split('/')[1];
+    const mesAtual = this.nomeMeses.find(value => value.mes === monthly).name;
+    
+    this.isDisabledNextMonth = mesAtual === this.listaSelecionada.monthName;
+    this.isDisabledBackMonth = 'Janeiro' === this.listaSelecionada.monthName;
   }
 
   private adicionaGasto(gasto: any): void {
